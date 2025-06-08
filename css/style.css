@@ -1,0 +1,638 @@
+/*  =========================================== 
+                VARIABLES Globales 
+    ===========================================  */
+html {
+  scroll-behavior: smooth;                    /* Scroll suave para todos los enlaces de ancla */
+  overflow-x: hidden;
+  max-width: 100%;
+}
+
+:root {
+  /* Color de fondo general del body */
+  --color-bg: #0a0a0a;
+
+  /* Color base para el texto */
+  --color-text: #f5f5f5;
+
+  /* Color de acento (usado en botones, hover, líneas decorativas) */
+  --color-accent: #e63946;
+
+  /* Glassmorphism: fondo semitransparente con blur */
+  --color-glass: rgba(255, 255, 255, 0.13);
+
+  /* Bordes claros para separar sutilmente elementos */
+  --color-border-light: rgba(255, 255, 255, 0.1);
+
+  /* Color de hover (coincide con accent para coherencia visual) */
+  --color-hover: #e63946;
+
+  /* Color para la línea animada debajo de los links */
+  --color-link-line: #e63946;
+}
+
+
+
+/*  =========================================== 
+                RESET GLOBAL
+    ===========================================  */
+* {
+    /* outline: 1px solid red; */
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  color: var(--color-text);
+  display: flex;
+
+  /* BACKGROUND IMAGE */
+  background-image: url('../img/bg-image.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed; /* Para efecto parallax suave */
+}
+
+/*  =========================================== 
+                SIDEBA-NAVBAR 
+    ===========================================  */
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 220px;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; 
+  background: var(--color-glass);
+  backdrop-filter: blur(8px);
+  border-right: 1px solid var(--color-border-light);
+  padding: 2rem 1rem;
+  z-index: 1000;
+}
+
+
+.logo h2 {
+    font-family: 'Oswald', sans-serif;
+    font-size: 1.8rem;
+    color: var(--color-accent);
+    animation: float 5s ease-in-out infinite;
+    display: flex;
+    justify-content: center;
+}
+
+/* Animación suave de "respiración" */
+@keyframes float {
+    0%, 100% {transform: translateY(0);}
+    50% {transform: translateY(-4px);}
+}
+
+.nav-wrapper {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.nav-links {
+    display: flex;
+    flex-direction: column;
+    gap: 1.75rem;
+    align-items: flex-start;
+}
+
+.nav-links a {
+  width: 100%;                     
+  padding: 0.4rem 0.6rem;          
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  color: var(--color-text);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+  position: relative;
+  border-radius: 6px;              
+}
+
+.nav-links i {
+  font-size: 1.25rem; /* Más presencia sin romper el diseño */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+}
+
+
+.nav-links a:hover {
+  color: var(--color-hover);
+}
+
+.nav-links a.active {
+  color: var(--color-accent);
+}
+
+.nav-links a.active::after {
+  width: 100%;
+  background-color: var(--color-accent);
+}
+
+
+.nav-links a::after {
+    content: '';
+    position: absolute;
+    bottom: -6px;
+    left: 50%;
+    transform: translateX(-50%) scaleX(0);
+    transform-origin: center;
+    height: 1px;
+    width: 100%; /* siempre 100%, pero controlamos la escala */
+    background-color: var(--color-link-line);
+    opacity: 0;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.nav-links a:hover::after,
+.nav-links a.active::after {
+    transform: translateX(-50%) scaleX(1);
+    opacity: 1;
+    background-color: var(--color-accent);
+}
+
+/* Footer del sidebar abajo a la izquierda */
+.sidebar-bottom {
+  width: 100%;
+  font-size: 0.75rem;
+  color: var(--color-text);
+  align-self: flex-start;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.sidebar-social-icons {
+  display: flex;
+  gap: 0.8rem;
+}
+
+.sidebar-social-icons a {
+  color: var(--color-text);
+  font-size: 1.4rem;
+  transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.sidebar-social-icons a:hover {
+  color: var(--color-accent);
+  transform: scale(1.2);
+}
+
+
+.menu-toggle {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 1.8rem;
+  cursor: pointer;
+  color: #0a0a63;
+}
+
+.mobile-logo {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .mobile-logo {
+    display: block;
+    position: fixed;
+    top: 1rem;
+    left: 3.2rem; /* deja espacio al lado del botón */
+    z-index: 2001;
+    font-size: 1.2rem;
+    font-family: 'Oswald', sans-serif;
+    color: var(--color-accent);
+  }
+
+  .logo { /* el logo dentro del sidebar */
+    display: none;
+  }
+}
+
+/* ====================================
+   SECCIONES PRINCIPALES EN MAIN
+==================================== */
+
+.main-content {
+  flex: 1;
+  margin-left: 220px;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 4rem;
+}
+
+.section {
+  padding-top: 4rem;
+  color: white;
+}
+
+/* ====================================
+            HERO SECTION
+   ==================================== */
+.hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: white;
+  overflow: hidden;
+}
+
+.hero-overlay {
+    position: absolute;
+    inset: 0;
+    border-radius: 10%;
+    background: rgba(0, 0, 0, 0.04);
+    backdrop-filter: blur(2px);
+    z-index: 1;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 600px;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    flex-direction: column;
+    margin: 0 auto;
+    z-index: 2;
+}
+
+.hero h1 {
+  font-size: 2.8rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.hero p {
+  font-size: 1.2rem;
+  margin-bottom: 2rem;
+}
+
+.hero-focus-text {
+  display: flex;
+  gap: 0.6rem;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.1rem;
+  font-weight: 400;
+  color: var(--color-text);
+  margin-top: 1rem;
+}
+
+.hero-focus-text span {
+  display: inline-block;
+  filter: blur(4px);
+  opacity: 0.5;
+  transition: filter 0.4s ease, opacity 0.4s ease;
+}
+
+
+
+.btn-cta {
+  display: inline-block;
+  padding: 0.75rem 1.5rem;
+  background-color: var(--color-accent);
+  color: var(--color-link-line);
+  font-weight: 600;
+  text-decoration: none;
+  border-radius: 8px;
+  transition: background 0.3s ease;
+}
+
+.btn-cta:hover {
+  background-color: black;
+  color: var(--color-text);
+}
+
+.cta-group {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.btn-cta {
+  position: relative;
+  display: inline-block;
+  padding: 0.8rem 1.6rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border: 2px solid var(--color-accent);
+  background-color: transparent;
+  color: white;
+  text-decoration: none;
+  border-radius: 50px;
+  overflow: hidden;
+  transition: all 0.3s ease-in-out;
+  z-index: 0;
+}
+
+.btn-cta::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50px;
+  background: var(--color-accent);
+  transform: scale(0);;
+  transform-origin: center;
+  transition: transform 0.3s ease-in-out;
+  z-index: -1;
+}
+
+.btn-cta:hover::before {
+  transform: scale(1.5);
+}
+
+.btn-cta:hover {
+  color: white;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+}
+
+.btn-cta.ghost {
+  border-color: white;
+  color: var(--color-link-line);
+}
+
+.btn-cta.ghost::before {
+  background: white;
+}
+
+.btn-cta.ghost:hover {
+  color: var(--color-accent);
+}
+
+/* =============================
+   PROJECTS CAROUSEL BASE
+============================= */
+
+.projects-carousel {
+    position: relative;
+    height: 100vh; /* Full screen */
+    background-color: var(--color-bg); /* Fondo oscuro o el que prefieras */
+    overflow: hidden;
+    padding: 2rem;
+    box-sizing: border-box;
+}
+
+.carousel-track {
+    display: flex;
+    gap: 0.3rem;
+    height: 100%;
+    transition: all 0.3s ease;
+}
+
+
+.project-banner {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: flex 0.4s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #000;
+}
+
+.project-banner:hover {
+  flex: 3;
+}
+
+
+.project-banner video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: filter 0.4s ease;
+}
+
+.project-banner .project-info {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 1rem;
+  background: linear-gradient(to top, rgba(0,0,0,0.8), rgba(0,0,0,0));
+  color: white;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+  pointer-events: none; /* No bloquea el hover */
+}
+
+
+.project-banner:hover video {
+  filter: brightness(1);
+}
+
+.project-banner:hover .project-info {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Hover efecto en los demás banners */
+.carousel-track:hover .project-banner:not(:hover) {
+  filter: brightness(0.6);
+}
+
+
+/* =============================
+        ABOUT SECTION
+   ============================= */
+
+.about-section {
+  position: relative;
+  min-height: 100vh;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2rem;
+}
+
+.about-container {
+  display: flex;
+  max-width: 1200px;
+  width: 100%;
+  gap: 2rem;
+  align-items: center;
+  justify-content: center;
+}
+
+.about-image {
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeUp 0.8s ease forwards;
+    animation-delay: 0.3s;
+}
+
+.about-image img {
+  width: 100%;
+  max-width: 500px;
+  border-radius: 12px;
+  object-fit: cover;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+}
+
+.about-text {
+  flex: 1;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeUp 0.8s ease forwards;
+  animation-delay: 0.6s;
+}
+
+@keyframes fadeUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.about-text h2 {
+  color: var(--color-accent);
+  font-size: 2.4rem;
+  margin-bottom: 1rem;
+  font-family: 'Playfair Display', serif;
+}
+
+.about-text p {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+}
+
+.about-awards {
+  list-style: none;
+  padding: 0;
+  font-size: 1rem;
+}
+
+.about-awards li {
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+}
+
+
+/* ====================================
+            CONTACT STYLING
+   ==================================== */
+
+/* =============================
+   CONTACT SECTION
+============================= */
+
+.contact-section {
+  position: relative;
+  min-height: 100vh;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2rem;
+}
+
+.contact-container {
+  max-width: 600px;
+  width: 100%;
+  text-align: center;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeUp 0.8s ease forwards;
+  animation-delay: 0.3s;
+}
+
+.contact-container h2 {
+  color: var(--color-accent);
+  font-size: 2.4rem;
+  margin-bottom: 0.5rem;
+}
+
+.contact-subtitle {
+  font-size: 1.1rem;
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 2rem;
+}
+
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.contact-form input,
+.contact-form textarea {
+  width: 100%;
+  padding: 1rem;
+  border-radius: 8px;
+  border: none;
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--color-text);
+  font-size: 1rem;
+  transition: background 0.3s ease;
+}
+
+.contact-form input::placeholder,
+.contact-form textarea::placeholder {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.contact-form input:focus,
+.contact-form textarea:focus {
+  outline: none;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.contact-form button {
+  padding: 1rem;
+  border-radius: 8px;
+  border: none;
+  background: var(--color-accent);
+  color: #fff;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.3s ease;
+}
+
+.contact-form button:hover {
+  background: var(--color-hover);
+  transform: scale(1.05);
+}
+ 
+
+
+/* ====================================
+            FOOTER STYLING
+   ==================================== */
+.site-footer {
+  text-align: center;
+  font-size: 0.85rem;
+  color: #ccc;
+  margin-top: auto;
+  padding: 2rem 0 1rem;
+}
+
